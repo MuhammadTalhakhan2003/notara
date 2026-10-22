@@ -20,6 +20,7 @@ import remarkGfm from "remark-gfm";
 import { api, apiHeaders, prefs, toPayload } from "@/lib/client";
 import { db, touchNotebook, uid } from "@/lib/db";
 import { chatToMarkdown, exportMarkdown, markdownToText } from "@/lib/exporters";
+import { FREE_LIMITS, askUpgrade, consume } from "@/lib/plus";
 import { LANGUAGES } from "@/lib/studio";
 import type { ChatMessage, ChatSegment, Citation, Notebook, Source, SourceGuide } from "@/lib/types";
 import { PanelHeader } from "./sources";
@@ -102,6 +103,13 @@ export function ChatPanel({
     async (question: string) => {
       const q = question.trim();
       if (!q || abortRef.current) return;
+      if (!consume("chat")) {
+        askUpgrade(
+          "Your brain earned a break 🧠",
+          `Free notebooks get ${FREE_LIMITS.chat} questions a day and you've used them all. Come back tomorrow, or get Plus and ask as much as you like.`,
+        );
+        return;
+      }
       setInput("");
       const userMsg: ChatMessage = { id: uid(), notebookId: notebook.id, role: "user", segments: [{ text: q, citations: [] }], createdAt: Date.now() };
       await db.messages.add(userMsg);
@@ -330,6 +338,25 @@ interface SpeechRec {
   stop: () => void;
 }
 
+// Something to read while the model reads.
+const THINKING = [
+  "Reading your sources faster than you did the night before the exam…",
+  "Underlining the important bits so you don't have to…",
+  "Asking the footnotes politely…",
+  "Putting the kettle on for the neurons ☕",
+  "Cross-checking, because citations matter…",
+  "Skimming like a professional…",
+];
+
+function ThinkingLine() {
+  const [i, setI] = useState(() => Math.floor(Math.random() * THINKING.length));
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % THINKING.length), 2600);
+    return () => clearInterval(t);
+  }, []);
+  return <span className="animate-rise" key={i}>{THINKING[i]}</span>;
+}
+
 // ---------------------------------------------------------------------------
 
 function Overview({
@@ -379,14 +406,14 @@ function Overview({
   return (
     <div className="pt-4">
       <div className="text-5xl">{notebook.emoji}</div>
-      <h1 className="mt-3 font-display text-3xl font-semibold leading-tight">{notebook.title}</h1>
+      <h1 className="mt-3 font-brand text-4xl font-semibold leading-tight tracking-tight">{notebook.title}</h1>
       <p className="mt-1 text-sm text-muted">
         {sources.length} source{sources.length === 1 ? "" : "s"}
         {sources.length !== selected.length && ` · ${selected.length} selected`}
       </p>
       {selected.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-line p-4 text-sm text-muted">
-          {sources.length ? "Select at least one source on the left to ground answers." : "Add sources to get a summary, suggested questions and cited answers."}
+          {sources.length ? "Select at least one source on the left to ground answers." : "Add a source to get started. Notara is ready to read; it just needs something to read."}
         </p>
       ) : ov && !stale ? (
         <>
@@ -455,7 +482,7 @@ function AssistantMessage({
     <div className="animate-rise group">
       {empty && live ? (
         <div className="flex items-center gap-2 py-2 text-sm text-muted">
-          <Spinner className="text-accent" /> Thinking through your sources...
+          <Spinner className="text-accent" /> <ThinkingLine />
         </div>
       ) : (
         <div className="prose-ink text-[15px]">

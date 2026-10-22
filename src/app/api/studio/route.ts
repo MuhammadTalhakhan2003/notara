@@ -12,11 +12,15 @@ import {
 } from "@/lib/server/anthropic";
 import { GROQ_CONTEXT_CHARS, groqJson } from "@/lib/server/groq";
 import { formatPassages, selectPassages } from "@/lib/server/retrieval";
+import { isPlus } from "@/lib/server/plus";
 import { brief } from "@/lib/server/studio-spec";
 import type { SourcePayload, StudioOptions, StudioType } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+
+/** Kept in sync with PLUS_TOOLS in src/lib/plus.ts. */
+const PLUS_ONLY = new Set<StudioType>(["slides", "custom"]);
 
 const SYSTEM = "You are Notara Studio. You turn a user's source documents into polished learning and research materials.";
 
@@ -29,6 +33,7 @@ export async function POST(req: Request) {
     };
     const spec = brief(type, options);
     if (!spec) throw new UserFacingError("Unknown output type.");
+    if (PLUS_ONLY.has(type) && !isPlus(req)) throw new UserFacingError("This Studio tool is part of Notara Plus.", 402);
     if (!sources?.some((s) => s.content.trim())) throw new UserFacingError("Select at least one source first.");
     checkSourceSize(sources);
     const provider = getProvider(req);

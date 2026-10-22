@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { api, prefs, timeAgo, toPayload } from "@/lib/client";
 import { db, touchNotebook, uid } from "@/lib/db";
 import { exportMarkdown, exportStudioItem, formatsFor, noteToMarkdown } from "@/lib/exporters";
+import { FREE_LIMITS, PLUS_TOOLS, askUpgrade, consume, getPlus } from "@/lib/plus";
 import { LANGUAGES, STUDIO_TOOLS, defaultOptions, toolMeta } from "@/lib/studio";
 import type { Note, Source, StudioItem, StudioOptions, StudioType } from "@/lib/types";
 import { PanelHeader, addSource } from "./sources";
@@ -50,8 +51,19 @@ export const TOOL_ICON: Record<StudioType, LucideIcon> = {
 
 export async function generateStudio(notebookId: string, type: StudioType, options: StudioOptions, sources: Source[]) {
   const selected = sources.filter((s) => s.selected);
+  if (PLUS_TOOLS.has(type) && !getPlus()) {
+    askUpgrade(`${toolMeta(type).label} is a Plus tool`, "Slide Decks and Custom Reports come with Notara Plus, along with unlimited questions and Studio creations.");
+    return;
+  }
   if (!selected.length) {
     toast("Select at least one source first", "error");
+    return;
+  }
+  if (!consume("studio")) {
+    askUpgrade(
+      "That's a productive day ✍️",
+      `The free plan makes ${FREE_LIMITS.studio} Studio creations a day and you've made them all. Get Plus for unlimited guides, quizzes, podcasts and more.`,
+    );
     return;
   }
   const meta = toolMeta(type);
@@ -119,6 +131,9 @@ export function StudioPanel({
                 >
                   <Icon className="mb-1.5 size-5" />
                   <span className="block text-[13px] font-semibold leading-tight text-ink">{t.label}</span>
+                  {PLUS_TOOLS.has(t.type) && (
+                    <span className="mt-1 inline-block rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-1.5 py-px text-[9px] font-bold tracking-wider text-amber-950">PLUS</span>
+                  )}
                 </button>
                 <button
                   aria-label={`Customise ${t.label}`}
@@ -221,7 +236,7 @@ function StudioRow({ item, onOpen, sources }: { item: StudioItem; onOpen: () => 
           {item.status === "error"
             ? item.error
             : item.status === "pending"
-              ? "This can take a minute"
+              ? "About a minute. Perfect time to stretch."
               : `${meta.label} · ${item.sourceCount} source${item.sourceCount === 1 ? "" : "s"} · ${timeAgo(item.createdAt)}`}
         </span>
       </button>

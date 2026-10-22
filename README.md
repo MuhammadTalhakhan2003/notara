@@ -44,6 +44,26 @@ Visitors can also paste their own `sk-ant-…` or `gsk_…` key in **Settings**.
 
 Notebooks are stored in the browser (IndexedDB), with no account or database.
 
+## Notara Plus (Rs 999 / month)
+
+| | Free | Plus |
+|---|---|---|
+| Questions | 25 a day | Unlimited |
+| Studio creations | 3 a day | Unlimited |
+| Sources per notebook | 10 | 50 |
+| Web Discover, Slide Decks, Custom Reports | No | Yes |
+
+Customers tap **Get Plus on WhatsApp**, pay by JazzCash, EasyPaisa or bank transfer, and receive an activation code to paste into **Settings** or the `/plus` page.
+
+**Making a code** (from this folder, after the customer pays):
+
+```bash
+node scripts/plus-code.mjs        # valid 31 days
+node scripts/plus-code.mjs 365    # valid a year
+```
+
+Codes are signed with `NOTARA_PLUS_SECRET`, so nothing is stored on a server and a new code never needs a redeploy. Keep the secret in `.env.local` identical to the one on Vercel. Discover, Slide Decks and Custom Reports are checked on the server; the daily free limits are counted in the browser.
+
 ## Run locally
 
 ```bash

@@ -29,6 +29,7 @@ import { api, prefs, toPayload, wordCount } from "@/lib/client";
 import { db, touchNotebook, uid } from "@/lib/db";
 import { exportMarkdown } from "@/lib/exporters";
 import { ACCEPT, parseFile } from "@/lib/parsers";
+import { FREE_LIMITS, askUpgrade, getPlus, usePlus } from "@/lib/plus";
 import type { Source, SourceGuide, SourceKind } from "@/lib/types";
 import { Button, DownloadMenu, IconButton, Menu, Modal, Spinner, cx, inputCls, toast } from "./ui";
 
@@ -60,6 +61,12 @@ const KIND_TINT: Record<SourceKind, string> = {
 export async function addSource(notebookId: string, s: { title: string; kind: SourceKind; content: string; url?: string }) {
   const content = s.content.trim();
   if (!content) throw new Error(`"${s.title}" has no readable text.`);
+  const limit = getPlus() ? 50 : FREE_LIMITS.sources;
+  if ((await db.sources.where("notebookId").equals(notebookId).count()) >= limit) {
+    if (!getPlus())
+      askUpgrade("This notebook is full 📚", `Free notebooks hold ${FREE_LIMITS.sources} sources. Plus notebooks hold 50, which is enough for a whole semester.`);
+    throw new Error(`This notebook already has ${limit} sources.`);
+  }
   const source: Source = {
     id: uid(),
     notebookId,
@@ -443,6 +450,7 @@ function AddSourceDialog({ open, onClose, notebookId }: { open: boolean; onClose
 }
 
 function Discover({ onImport }: { onImport: (urls: string[]) => void }) {
+  const plus = usePlus();
   const [topic, setTopic] = useState("");
   const [busy, setBusy] = useState(false);
   const [results, setResults] = useState<{ url: string; title: string; reason: string; recommended: boolean }[]>([]);
@@ -461,6 +469,19 @@ function Discover({ onImport }: { onImport: (urls: string[]) => void }) {
       setBusy(false);
     }
   };
+
+  if (!plus)
+    return (
+      <div className="rounded-3xl border border-amber-400/40 bg-amber-400/10 p-6 text-center">
+        <p className="font-brand text-xl font-semibold">Let Notara do the googling</p>
+        <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
+          Describe a topic and Notara searches the web for good sources you can import in one click. Web Discover is part of Notara Plus.
+        </p>
+        <Button variant="primary" className="mt-4" onClick={() => askUpgrade("Web Discover is a Plus feature", "Find sources on any topic without opening twenty tabs.")}>
+          See Notara Plus
+        </Button>
+      </div>
+    );
 
   return (
     <div className="space-y-3">

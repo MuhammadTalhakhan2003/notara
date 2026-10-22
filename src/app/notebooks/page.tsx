@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { UpgradeDialog } from "@/components/plus";
+import { SiteFooter } from "@/components/SiteFooter";
 import { Button, IconButton, Menu, Toaster, cx, inputCls, toast } from "@/components/ui";
 import { prefs, timeAgo } from "@/lib/client";
 import { db, deleteNotebook, exportNotebookBackup, importNotebookBackup, uid } from "@/lib/db";
@@ -187,9 +189,9 @@ export default function NotebooksPage() {
             <span className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-accent-soft text-accent">
               <Sparkles className="size-7" />
             </span>
-            <h2 className="mt-5 font-display text-xl font-bold">Create your first notebook</h2>
+            <h2 className="mt-5 font-brand text-2xl font-semibold">A blank desk. The best kind.</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-muted">
-              Add PDFs, websites, YouTube videos or notes. Notara reads them, answers your questions with citations, and builds study guides, quizzes and slides.
+              Even Einstein started with an empty desk (probably). Add PDFs, websites, YouTube videos or notes, and Notara will read them, answer with citations, and build study guides, quizzes and slides.
             </p>
             <Button variant="primary" className="mt-6" onClick={create}>
               <Plus className="size-4" /> New notebook
@@ -233,6 +235,8 @@ export default function NotebooksPage() {
         )}
         {notebooks && notebooks.length > 0 && shown.length === 0 && <p className="mt-8 text-center text-sm text-muted">No notebooks match “{q}”.</p>}
       </main>
+      <SiteFooter />
+      <UpgradeDialog />
       <Toaster />
     </div>
   );

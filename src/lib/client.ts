@@ -21,7 +21,12 @@ export const prefs = {
 
 export function apiHeaders(): HeadersInit {
   const key = prefs.get("apiKey");
-  return { "Content-Type": "application/json", ...(key ? { "x-notara-key": key } : {}) };
+  const plus = prefs.get("plusCode");
+  return {
+    "Content-Type": "application/json",
+    ...(key ? { "x-notara-key": key } : {}),
+    ...(plus ? { "x-notara-plus": plus } : {}),
+  };
 }
 
 export async function api<T>(path: string, body: unknown, signal?: AbortSignal): Promise<T> {
@@ -32,6 +37,8 @@ export async function api<T>(path: string, body: unknown, signal?: AbortSignal):
   } catch {
     throw new Error(res.status === 504 ? "The request timed out. Try fewer sources or a shorter output." : `Request failed (${res.status}).`);
   }
+  // 402 = a Plus-only feature; the upgrade dialog listens for this event.
+  if (res.status === 402) window.dispatchEvent(new CustomEvent("notara:upgrade", { detail: json.error }));
   if (!res.ok) throw new Error(json.error ?? `Request failed (${res.status}).`);
   return json;
 }

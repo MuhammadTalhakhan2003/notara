@@ -7,6 +7,7 @@ import {
   Check,
   ChevronDown,
   Compass,
+  Crown,
   FileText,
   Globe,
   Image as ImageIcon,
@@ -23,15 +24,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Logo, ThemeToggle, cx } from "@/components/ui";
-
-const NAV = [
-  { href: "#features", label: "Features" },
-  { href: "#how", label: "How it works" },
-  { href: "#downloads", label: "Downloads" },
-  { href: "#faq", label: "FAQ" },
-];
+import { MarketingNav, Ornament } from "@/components/MarketingNav";
+import { SiteFooter } from "@/components/SiteFooter";
+import { cx } from "@/components/ui";
+import { FREE_LIMITS, PLUS_PRICE } from "@/lib/plus";
 
 const FORMATS: { icon: LucideIcon; label: string }[] = [
   { icon: FileText, label: "PDF & Word" },
@@ -60,7 +56,7 @@ const DOWNLOADS = [
 const FAQ = [
   {
     q: "Is Notara free to use?",
-    a: "Yes. Notara runs on free Groq models out of the box. If you add a Claude API key in Settings, it switches to Claude for longer documents and more precise citations.",
+    a: `Yes. The free plan includes ${FREE_LIMITS.chat} questions and ${FREE_LIMITS.studio} Studio creations a day, with every download format. Notara Plus (${PLUS_PRICE}/month) removes the daily limits and adds web Discover, Slide Decks and Custom Reports.`,
   },
   {
     q: "Where are my notebooks stored?",
@@ -81,35 +77,9 @@ const FAQ = [
 ];
 
 export default function Landing() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 8);
-    on();
-    window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
-  }, []);
-
   return (
     <div className="min-h-dvh overflow-x-clip">
-      <header className={cx("sticky top-0 z-40 transition", scrolled ? "border-b border-line bg-bg/85 backdrop-blur" : "border-b border-transparent")}>
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
-          <Link href="/" aria-label="Notara home">
-            <Logo />
-          </Link>
-          <nav className="hidden items-center gap-6 text-sm text-muted md:flex">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="transition hover:text-ink">
-                {n.label}
-              </a>
-            ))}
-          </nav>
-          <div className="flex-1" />
-          <ThemeToggle />
-          <Link href="/notebooks" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent px-4 text-sm font-semibold text-accent-ink transition hover:opacity-90">
-            Open Notara <ArrowRight className="size-4" />
-          </Link>
-        </div>
-      </header>
+      <MarketingNav />
 
       {/* Hero */}
       <section className="relative">
@@ -119,8 +89,8 @@ export default function Landing() {
           <p className="mx-auto inline-flex items-center gap-2 rounded-full border border-line bg-panel/80 px-3 py-1 text-xs font-medium text-muted">
             <Sparkles className="size-3.5 text-rose" /> Your AI research notebook
           </p>
-          <h1 className="mx-auto mt-6 max-w-4xl font-display text-[40px] font-extrabold leading-[1.04] tracking-[-0.03em] [text-wrap:balance] sm:text-6xl lg:text-7xl">
-            Understand anything you read, <span className="text-accent">with sources</span> you can check.
+          <h1 className="mx-auto mt-6 max-w-4xl font-brand text-[44px] font-semibold leading-[1.02] tracking-[-0.02em] [text-wrap:balance] sm:text-7xl lg:text-[88px]">
+            Understand anything you read, <span className="italic text-accent">with sources</span> you can <span className="italic text-rose">check</span>.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base text-muted [text-wrap:balance] sm:text-lg">
             Upload documents, websites and videos. Ask questions and get answers with citations. Turn it all into study guides, podcasts, mind maps and slides you can download.
@@ -136,7 +106,7 @@ export default function Landing() {
               See what it does
             </a>
           </div>
-          <p className="mt-4 text-xs text-muted">Free to use · No sign-up · Notebooks stay in your browser</p>
+          <p className="mt-4 text-xs text-muted">Free to use · No sign-up · No more highlighting the entire textbook</p>
 
           <AppPreview />
         </div>
@@ -156,7 +126,7 @@ export default function Landing() {
 
       {/* Features */}
       <section id="features" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-24 sm:px-6">
-        <SectionTitle eyebrow="Features" title="One workspace for reading, thinking and studying" text="Everything NotebookLM does, plus the tools students and researchers kept asking for." />
+        <SectionTitle eyebrow="Features" title="One workspace for reading, thinking and studying" text="Everything NotebookLM does, plus the tools students and researchers kept asking for. Coffee not included." />
         <div className="mt-14 grid gap-4 md:grid-cols-6">
           <FeatureCard className="md:col-span-4" icon={MessageSquareQuote} title="Answers with citations" text="Ask across all your sources at once. Each claim links to the passage it came from. Hover to read the quote, click to jump to it.">
             <div className="mt-6 rounded-2xl border border-line bg-panel-2 p-4 text-left text-sm leading-relaxed">
@@ -205,14 +175,16 @@ export default function Landing() {
         </div>
       </section>
 
+      <Ornament className="pb-4" />
+
       {/* How it works */}
       <section id="how" className="scroll-mt-20 border-y border-line bg-panel/50">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-          <SectionTitle eyebrow="How it works" title="From a pile of files to real understanding" />
+          <SectionTitle eyebrow="How it works" title="From a pile of files to real understanding" text="Roughly the time it takes to make chai." />
           <ol className="mt-14 grid gap-4 md:grid-cols-3">
             {STEPS.map((s, i) => (
               <li key={s.title} className="rounded-2xl border border-line bg-panel p-6">
-                <span className="flex size-9 items-center justify-center rounded-full bg-accent text-sm font-bold text-accent-ink">{i + 1}</span>
+                <span className="font-brand text-5xl italic leading-none text-accent">{i + 1}</span>
                 <h3 className="mt-5 font-display text-lg font-bold">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
               </li>
@@ -251,6 +223,8 @@ export default function Landing() {
         </div>
       </section>
 
+      <Pricing />
+
       {/* FAQ */}
       <section id="faq" className="scroll-mt-20 border-t border-line bg-panel/50">
         <div className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
@@ -274,21 +248,15 @@ export default function Landing() {
         <div className="relative overflow-hidden rounded-3xl bg-[#0a0a0a] px-6 py-14 text-center text-white ring-1 ring-white/10 sm:px-12">
           <div className="pointer-events-none absolute -right-20 -top-28 size-80 rounded-full bg-[#007ba7]/40 blur-[90px]" />
           <div className="pointer-events-none absolute -bottom-32 -left-16 size-72 rounded-full bg-[#ff2d95]/25 blur-[90px]" />
-          <h2 className="relative mx-auto max-w-2xl font-display text-3xl font-extrabold tracking-tight [text-wrap:balance] sm:text-5xl">Start your first notebook in under a minute.</h2>
-          <p className="relative mx-auto mt-4 max-w-xl text-white/70">No sign-up. Drop in a PDF and ask your first question.</p>
+          <h2 className="relative mx-auto max-w-2xl font-brand text-4xl font-semibold tracking-tight [text-wrap:balance] sm:text-6xl">Start your first notebook in <span className="italic text-[#ff2d95]">under a minute</span>.</h2>
+          <p className="relative mx-auto mt-4 max-w-xl text-white/70">No sign-up. Drop in a PDF and ask your first question. Your future self, the one who actually did the reading, says thanks.</p>
           <Link href="/notebooks" className="relative mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-semibold text-[#0a0a0a] transition hover:bg-white/90">
             Open Notara <ArrowRight className="size-4" />
           </Link>
         </div>
       </section>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-8 text-sm text-muted sm:px-6">
-          <Logo />
-          <span className="flex-1">Your AI research notebook.</span>
-          <span>Designed &amp; developed by Muhammad Talha Khan</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
@@ -298,8 +266,8 @@ export default function Landing() {
 function SectionTitle({ eyebrow, title, text, align = "center" }: { eyebrow: string; title: string; text?: string; align?: "center" | "left" }) {
   return (
     <div className={cx(align === "center" && "mx-auto max-w-2xl text-center")}>
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-rose">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight [text-wrap:balance] sm:text-[42px] sm:leading-[1.1]">{title}</h2>
+      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-rose">{eyebrow}</p>
+      <h2 className="mt-3 font-brand text-4xl font-semibold tracking-tight [text-wrap:balance] sm:text-5xl sm:leading-[1.05]">{title}</h2>
       {text && <p className="mt-4 text-muted [text-wrap:pretty]">{text}</p>}
     </div>
   );
@@ -423,5 +391,59 @@ function AppPreview() {
         </div>
       </div>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+function Pricing() {
+  const free = [`${FREE_LIMITS.chat} questions a day`, `${FREE_LIMITS.studio} Studio creations a day`, `${FREE_LIMITS.sources} sources per notebook`, "Cited answers in 16 languages", "Every download format"];
+  const plus = ["Unlimited questions", "Unlimited Studio creations", "50 sources per notebook", "Web Discover", "Slide Decks and Custom Reports", "A warm feeling of supporting indie software"];
+  return (
+    <section id="pricing" className="mx-auto max-w-5xl scroll-mt-20 px-4 py-24 sm:px-6">
+      <SectionTitle eyebrow="Pricing" title="Free forever, Plus when you're serious" text="Start free. Upgrade the week your syllabus starts taking it personally." />
+      <div className="mt-14 grid gap-5 md:grid-cols-2">
+        <div className="flex flex-col rounded-3xl border border-line bg-panel p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Free</p>
+          <p className="mt-4 font-brand text-5xl font-semibold">Rs 0</p>
+          <p className="mt-1 text-sm text-muted">For curious minds and light reading.</p>
+          <ul className="mt-6 flex-1 space-y-2.5 text-sm">
+            {free.map((f) => (
+              <li key={f} className="flex gap-2.5">
+                <Check className="mt-0.5 size-4 shrink-0 text-accent" /> {f}
+              </li>
+            ))}
+          </ul>
+          <Link href="/notebooks" className="mt-8 inline-flex h-11 items-center justify-center rounded-full border border-line font-semibold transition hover:border-accent/60">
+            Start free
+          </Link>
+        </div>
+        <div className="relative flex flex-col overflow-hidden rounded-3xl border border-amber-400/50 bg-panel p-8 shadow-2xl shadow-amber-500/10">
+          <div className="pointer-events-none absolute inset-2 rounded-[20px] border border-amber-400/20" aria-hidden />
+          <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-amber-400/15 blur-3xl" aria-hidden />
+          <p className="relative flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-amber-500">
+            <Crown className="size-4" /> Notara Plus
+          </p>
+          <p className="relative mt-4 font-brand text-5xl font-semibold">
+            {PLUS_PRICE}
+            <span className="ml-1 font-sans text-base font-normal text-muted">/ month</span>
+          </p>
+          <p className="relative mt-1 text-sm text-muted">For the thesis, the boards, the bar exam.</p>
+          <ul className="relative mt-6 flex-1 space-y-2.5 text-sm">
+            {plus.map((f) => (
+              <li key={f} className="flex gap-2.5">
+                <Check className="mt-0.5 size-4 shrink-0 text-amber-500" /> {f}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/plus"
+            className="relative mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 font-semibold text-amber-950 transition hover:opacity-90"
+          >
+            <Crown className="size-4" /> Get Notara Plus
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }

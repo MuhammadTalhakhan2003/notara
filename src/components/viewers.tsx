@@ -461,7 +461,7 @@ function QuizView({ data, onAsk }: { data: QuizData; onAsk: (q: string) => void 
             {score}/{data.questions.length}
           </p>
           <p className="mt-2 text-muted">
-            {score === data.questions.length ? "Perfect! 🎉" : score / data.questions.length >= 0.7 ? "Great work!" : "Keep going, review the explanations below."}
+            {score === data.questions.length ? "Perfect score! Your teachers would be suspicious. 🎉" : score / data.questions.length >= 0.7 ? "Great work! Nearly professor material." : "Every expert was once a beginner. Review the explanations below and try again."}
           </p>
           <Button
             variant="primary"

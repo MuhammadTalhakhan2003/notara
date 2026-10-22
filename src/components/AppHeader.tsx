@@ -4,6 +4,7 @@ import { Settings } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { apiHeaders } from "@/lib/client";
+import { PlusButton } from "./plus";
 import { SettingsDialog } from "./SettingsDialog";
 import { IconButton, Logo, ThemeToggle, cx } from "./ui";
 
@@ -45,6 +46,7 @@ export function AppHeader({ children }: { children?: ReactNode }) {
         </Link>
         <div className="flex-1" />
         <ProviderBadge />
+        <PlusButton />
         {children}
         <ThemeToggle />
         <IconButton label="Settings" onClick={() => setSettings(true)}>

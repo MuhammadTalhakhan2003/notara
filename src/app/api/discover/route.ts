@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { FALLBACK_BETA, MODEL, UserFacingError, errorResponse, getProvider } from "@/lib/server/anthropic";
 import { GROQ_MODEL } from "@/lib/server/groq";
+import { isPlus } from "@/lib/server/plus";
 
 export const runtime = "nodejs";
 export const maxDuration = 180;
@@ -34,6 +35,7 @@ function parsePicks(text: string) {
 export async function POST(req: Request) {
   try {
     const { topic } = (await req.json()) as { topic: string };
+    if (!isPlus(req)) throw new UserFacingError("Web Discover is a Notara Plus feature. Upgrade to search the web for sources.", 402);
     if (!topic?.trim()) throw new UserFacingError("Describe what you want to research.");
     const provider = getProvider(req);
     let results: Result[];

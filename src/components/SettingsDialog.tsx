@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { prefs } from "@/lib/client";
 import { LANGUAGES } from "@/lib/studio";
+import { ActivatePlus } from "./plus";
 import { Button, Field, Modal, inputCls, toast } from "./ui";
 
 export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -18,6 +19,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
   return (
     <Modal open={open} onClose={onClose} title="Settings">
       <div className="space-y-5 p-5">
+        <ActivatePlus />
         <Field label="Default output language" hint="Chat answers and Studio outputs use this language unless you change it.">
           <select className={inputCls} value={language} onChange={(e) => setLanguage(e.target.value)}>
             {LANGUAGES.map((l) => (

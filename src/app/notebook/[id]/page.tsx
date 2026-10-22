@@ -10,6 +10,7 @@ import { SourceViewer, SourcesPanel } from "@/components/sources";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { StudioPanel } from "@/components/studio";
 import { ProviderBadge } from "@/components/AppHeader";
+import { PlusButton, UpgradeDialog } from "@/components/plus";
 import { Button, IconButton, Logo, Menu, ThemeToggle, Toaster, cx, toast } from "@/components/ui";
 import { StudioViewer } from "@/components/viewers";
 import { db, exportNotebookBackup } from "@/lib/db";
@@ -110,6 +111,7 @@ export default function NotebookPage() {
           ]}
         />
         <ProviderBadge />
+        <PlusButton className="hidden sm:inline-flex" />
         <ThemeToggle />
         <IconButton label="Settings" onClick={() => setSettings(true)}>
           <Settings className="size-4" />
@@ -168,6 +170,7 @@ export default function NotebookPage() {
       )}
       {item?.status === "ready" && <StudioViewer item={item} onClose={() => setViewItem(null)} onAsk={ask} />}
       <SettingsDialog open={settings} onClose={() => setSettings(false)} />
+      <UpgradeDialog />
       <Toaster />
     </div>
   );
