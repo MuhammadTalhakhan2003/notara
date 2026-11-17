@@ -32,6 +32,8 @@ Visitors can also paste their own `sk-ant-…` or `gsk_…` key in **Settings**.
 
 **Studio**: Audio Overview (two-host podcast with transcript and voice picker), Mind Map (interactive, collapsible), Study Guide, Briefing Doc, FAQ, Timeline, Flashcards (study mode), Quiz (scored), Slide Deck, Data Table (sortable), Blog Post, Custom Report. Each one can be customised by length, difficulty, count, focus and language.
 
+**Exam Coach** (`/exam`): mobile-first exam practice. The model writes exam-style questions, a reason for every wrong option and a supporting quote for each answer. The server then looks for each quote in the study material and drops any question whose quote it cannot find, so an explanation the material doesn't support never reaches the learner. After a round you see mastery for each topic, and you can drill your weak topics with fresh questions. It ships with a CompTIA A+ networking study pack, and you can also paste your own material.
+
 **Downloads**
 | What | Formats |
 |---|---|

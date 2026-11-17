@@ -1,0 +1,278 @@
+{
+  "title": "Networking Essentials practice set",
+  "questions": [
+    {
+      "id": "d360c1d2-fbeb-4ef1-a7be-98262513695d",
+      "topic": "Ports and protocols",
+      "question": "A technician needs to choose a protocol for a real-time voice chat application that prioritizes speed over reliability. Which protocol should they select?",
+      "explanation": "UDP is connectionless and faster, making it suitable for real-time voice where speed matters more than retransmission.",
+      "options": [
+        "HTTPS",
+        "FTP",
+        "UDP",
+        "TCP"
+      ],
+      "whyWrong": [
+        "HTTPS runs over TCP and includes encryption, which adds overhead.",
+        "FTP is a file‑transfer protocol and not used for real‑time media.",
+        "",
+        "TCP is connection‑oriented and adds latency due to handshaking and acknowledgements."
+      ],
+      "answerIndex": 2,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "Ports and protocols TCP and UDP are the two main transport protocols. TCP is connection-oriented: before any data is sent, the two hosts complete a three-way handshake (SYN, SYN-ACK, ACK), and every segment is acknowledged, so lost data is retransmitted. UDP is connectionless: it sends datagrams without a handshake or acknowledgements, which makes it faster and lighter but unreliable. Streaming, VoIP and DNS lookups commonly use UDP because speed matters more than retransmitting a lost packet.",
+        "highlight": [
+          388,
+          497
+        ]
+      }
+    },
+    {
+      "id": "ac3b1ac5-8c5b-44e5-8a02-4e1af93f8f2a",
+      "topic": "Ports and protocols",
+      "question": "A user configures a mail client to retrieve messages and wants to keep messages on the server for access from multiple devices. Which port should the client use?",
+      "explanation": "IMAP uses TCP port 143 and keeps messages on the server, allowing sync across devices.",
+      "options": [
+        "TCP 443",
+        "TCP 143",
+        "TCP 110",
+        "TCP 25"
+      ],
+      "whyWrong": [
+        "Port 443 is HTTPS, not an email retrieval protocol.",
+        "",
+        "Port 110 is POP3, which typically removes messages from the server.",
+        "Port 25 is for SMTP (sending mail)."
+      ],
+      "answerIndex": 1,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "File transfer and remote access ports: FTP uses TCP ports 20 (data) and 21 (control). SSH uses TCP port 22 and provides an encrypted remote command line; SFTP also runs over SSH on port 22. Telnet uses TCP port 23 and sends everything, including passwords, in clear text, so it should be replaced by SSH. Remote Desktop Protocol (RDP) uses TCP port 3389 to give a graphical remote session to a Windows computer. Email ports: SMTP uses TCP port 25 to send mail between servers. POP3 uses TCP port 110 and normally downloads messages to one device and removes them from the server. IMAP uses TCP port 143 and keeps messages on the server, so the same mailbox stays in sync across several devices.",
+        "highlight": [
+          580,
+          693
+        ]
+      }
+    },
+    {
+      "id": "030e9878-18c7-4b99-a7db-a37fe143c11e",
+      "topic": "IP addressing",
+      "question": "After a Windows PC fails to obtain an address from the DHCP server, it shows 169.254.12.45 as its IP. What does this indicate?",
+      "explanation": "An address in the 169.254.0.0/16 range is an APIPA address assigned when DHCP fails.",
+      "options": [
+        "The PC is using a static address.",
+        "The subnet mask is incorrect.",
+        "DHCP failed and the PC assigned itself an APIPA address.",
+        "The PC is connected to a VPN."
+      ],
+      "whyWrong": [
+        "A static address would be manually set, not automatically chosen in the 169.254 range.",
+        "An incorrect subnet mask would not cause an APIPA address.",
+        "",
+        "VPNs typically assign addresses from the VPN pool, not 169.254."
+      ],
+      "answerIndex": 2,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "If a Windows client cannot reach a DHCP server, it assigns itself an APIPA address in the 169.254.0.0/16 range. An address starting with 169.254 is therefore a strong sign that DHCP failed; the device can only talk to other APIPA devices on the same local segment and cannot reach the internet. The loopback address 127.0.0.1 always refers to the local machine and is used to test the computer's own TCP/IP stack.",
+        "highlight": [
+          0,
+          110
+        ]
+      }
+    },
+    {
+      "id": "a898df60-f782-44d5-8a1e-e35731f6e9f5",
+      "topic": "DHCP and DNS",
+      "question": "A network admin wants a network printer to always receive the same IP address via DHCP without configuring a static address on the printer. What DHCP feature should they use?",
+      "explanation": "A reservation ties a specific IP address to a device's MAC address, ensuring the device always gets that address from DHCP.",
+      "options": [
+        "Relay",
+        "Scope",
+        "Exclusion",
+        "Reservation"
+      ],
+      "whyWrong": [
+        "A relay forwards DHCP requests between subnets, not assign fixed addresses.",
+        "A scope defines the overall pool of addresses.",
+        "An exclusion removes addresses from the pool, but does not assign them.",
+        ""
+      ],
+      "answerIndex": 3,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "DHCP automatically gives clients an IP address, subnet mask, default gateway and DNS server addresses. The lease process has four steps, remembered as DORA: Discover (the client broadcasts to find a server), Offer (a server offers an address), Request (the client asks for the offered address) and Acknowledge (the server confirms the lease). The scope is the pool of addresses a DHCP server can hand out, and an exclusion keeps certain addresses out of that pool. A reservation ties a specific IP address to a device's MAC address, so a printer or server always receives the same address while still being managed by DHCP.",
+        "highlight": [
+          465,
+          622
+        ]
+      }
+    },
+    {
+      "id": "f41398e7-8207-401a-a7e9-d86e47b259d8",
+      "topic": "Wireless networking",
+      "question": "A technician is setting up three access points in a dense office in the United States, all using the 2.4 GHz band. Which set of channels should they use to avoid overlap?",
+      "explanation": "Channels 1, 6, 11 are the only non‑overlapping 2.4 GHz channels in North America.",
+      "options": [
+        "Channels 3, 8, 13",
+        "Channels 1, 6, 11",
+        "Channels 1, 4, 7",
+        "Channels 2, 5, 8"
+      ],
+      "whyWrong": [
+        "These channels overlap; only 1, 6, 11 are non‑overlapping.",
+        "",
+        "These channels overlap with each other.",
+        "These channels also overlap with each other."
+      ],
+      "answerIndex": 1,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "The 2.4 GHz band travels farther and passes through walls better, but it is more crowded and slower. The 5 GHz band offers more channels and higher speeds but has a shorter range. In the 2.4 GHz band, channels 1, 6 and 11 are the only non-overlapping channels in North America, so neighbouring access points should use different channels from that set to avoid interference.",
+        "highlight": [
+          180,
+          373
+        ]
+      }
+    },
+    {
+      "id": "3bd22420-ded3-4b53-ba1a-da0c5d1b0cd4",
+      "topic": "Wireless networking",
+      "question": "A small business is upgrading its Wi‑Fi and wants to ensure the network is protected against offline password‑guessing attacks. Which security protocol should they deploy?",
+      "explanation": "WPA3 replaces the WPA2 pre‑shared key exchange with SAE, which protects against offline password‑guessing attacks.",
+      "options": [
+        "WPA2-Personal",
+        "WPA3-Personal",
+        "WEP",
+        "WPA2-Enterprise"
+      ],
+      "whyWrong": [
+        "WPA2-Personal uses PSK without SAE, so it is vulnerable to offline attacks.",
+        "",
+        "WEP is outdated and insecure.",
+        "WPA2-Enterprise uses a RADIUS server but does not replace the PSK exchange mechanism."
+      ],
+      "answerIndex": 1,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "Wireless security: WEP and the original WPA (TKIP) are outdated and should not be used. WPA2 uses AES encryption and is still widely deployed. WPA3 replaces the WPA2 pre-shared key exchange with SAE (Simultaneous Authentication of Equals), which protects against offline password-guessing attacks. In businesses, WPA2-Enterprise or WPA3-Enterprise authenticates each user individually against a RADIUS server instead of using one shared password. Cables and connectors",
+        "highlight": [
+          143,
+          296
+        ]
+      }
+    },
+    {
+      "id": "0cb33220-b356-4a06-9bf3-4225096b6c52",
+      "topic": "Cables and connectors",
+      "question": "A network installer needs a cable that can reliably run 10 Gbps for up to 100 m in a data center. Which category of twisted‑pair cable should they choose?",
+      "explanation": "Category 6a supports 10 Gbps for the full 100 m distance.",
+      "options": [
+        "Category 6a",
+        "Category 3",
+        "Category 6",
+        "Category 5e"
+      ],
+      "whyWrong": [
+        "",
+        "Cat 3 is obsolete and does not support gigabit speeds.",
+        "Cat 6 supports 10 Gbps but only up to about 55 m.",
+        "Cat 5e supports only up to 1 Gbps."
+      ],
+      "answerIndex": 0,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "Twisted-pair Ethernet cables use RJ45 connectors and are wired using the T568A or T568B standard. A straight-through cable has the same standard on both ends; a crossover cable has T568A on one end and T568B on the other, although most modern devices detect and correct this automatically (auto-MDIX). Category 5e supports 1 Gbps up to 100 metres. Category 6 supports 10 Gbps, but only up to about 55 metres; Category 6a supports 10 Gbps for the full 100 metres. Plenum-rated cable has a fire-resistant jacket that produces less toxic smoke and is required in air-handling spaces such as above drop ceilings.",
+        "highlight": [
+          409,
+          461
+        ]
+      }
+    },
+    {
+      "id": "bf837305-c40b-4a48-9450-c8b3fb217d79",
+      "topic": "Cables and connectors",
+      "question": "An installer needs to run a high‑speed link between two buildings 8 km apart. Which type of fiber optic cable is most appropriate?",
+      "explanation": "Single‑mode fiber uses a very thin core and a laser to carry signals over long distances, many kilometres.",
+      "options": [
+        "Single‑mode fiber",
+        "Category 6a twisted‑pair",
+        "Coaxial RG‑6",
+        "Multimode fiber"
+      ],
+      "whyWrong": [
+        "",
+        "Category 6a is twisted‑pair, not fiber.",
+        "Coaxial cable does not support long‑distance high‑speed optical links.",
+        "Multimode fiber is used for shorter runs within a building."
+      ],
+      "answerIndex": 0,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "Fiber optic cable carries light instead of electrical signals, so it is immune to electromagnetic interference. Single-mode fiber uses a very thin core and a laser to carry signals over long distances, many kilometres. Multimode fiber has a wider core, is usually driven by LEDs or cheaper lasers and is used for shorter runs, such as within a building. Common fiber connectors include LC, SC and ST. Coaxial cable, such as RG-6, is used for cable TV and cable internet and uses F-type connectors. Network devices",
+        "highlight": [
+          112,
+          217
+        ]
+      }
+    },
+    {
+      "id": "11b4218b-3cf9-4e80-b025-28624b15c02c",
+      "topic": "Network devices",
+      "question": "During a network upgrade, a technician replaces a hub with a device that learns MAC addresses and forwards frames only to the correct port. What device did they install?",
+      "explanation": "A switch is a Layer 2 device that learns MAC addresses and forwards frames to the appropriate port.",
+      "options": [
+        "Wireless access point",
+        "Repeater",
+        "Switch",
+        "Router"
+      ],
+      "whyWrong": [
+        "An access point connects wireless clients to the network; it is not what replaces a hub on a wired LAN.",
+        "A repeater is a Layer 1 device that simply repeats signals.",
+        "",
+        "A router operates at Layer 3 and forwards packets between networks."
+      ],
+      "answerIndex": 2,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "A hub is a Layer 1 device that repeats every incoming signal out of every port, so all connected devices share the same bandwidth and collisions are common. A switch is a Layer 2 device that learns the MAC addresses of connected devices and forwards each frame only to the port where the destination is located. A managed switch can be configured, for example to create VLANs, which split one physical switch into separate logical networks. A router is a Layer 3 device that forwards packets between different networks using IP addresses.",
+        "highlight": [
+          157,
+          310
+        ]
+      }
+    },
+    {
+      "id": "6f5bb618-7be2-4b05-b88c-6cbc4f123f95",
+      "topic": "Troubleshooting tools",
+      "question": "A user reports that a website loads slowly, but other sites work fine. The technician wants to see each hop the packets take to the site to locate a possible bottleneck. Which command should they use?",
+      "explanation": "tracert (traceroute) lists each router hop between the computer and a destination, helping locate where a connection fails.",
+      "options": [
+        "ping",
+        "ipconfig",
+        "tracert",
+        "nslookup"
+      ],
+      "whyWrong": [
+        "ping only measures round‑trip time to the destination.",
+        "ipconfig shows local IP configuration, not network path.",
+        "",
+        "nslookup queries DNS, not path hops."
+      ],
+      "answerIndex": 2,
+      "evidence": {
+        "sourceTitle": "Networking Essentials: CompTIA A+ Core 1 study notes",
+        "passage": "Command-line tools: ping tests whether a host is reachable and measures round-trip time. ipconfig shows a Windows computer's IP configuration; ipconfig /release and ipconfig /renew request a new DHCP lease, and ipconfig /flushdns clears the local DNS cache. tracert (traceroute on Linux and macOS) lists each router hop between the computer and a destination, which helps locate where a connection fails. nslookup queries DNS servers directly to check name resolution. netstat lists active connections and listening ports.",
+        "highlight": [
+          258,
+          403
+        ]
+      }
+    }
+  ],
+  "checked": 10,
+  "dropped": 0,
+  "provider": "sample"
+}
